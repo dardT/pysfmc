@@ -1,0 +1,120 @@
+"""Query client for SFMC Assets (Content Builder) API."""
+
+from typing import TYPE_CHECKING, Optional
+
+from ..models.assets import Asset, AssetResponse
+
+if TYPE_CHECKING:
+    from ..client import AsyncSFMCClient, SFMCClient
+
+
+class QueryClient:
+    """Synchronous client for Content Builder asset query operations."""
+
+    def __init__(self, client: "SFMCClient"):
+        self._client = client
+
+    def get_asset_by_id(self, asset_id: int) -> Asset:
+        """Get a specific asset by ID.
+
+        Args:
+            asset_id: The asset ID to retrieve
+
+        Returns:
+            Asset model instance
+        """
+        response_data = self._client.get(f"/asset/v1/content/assets/{asset_id}")
+        return Asset(**response_data)
+
+    def get_assets(
+        self,
+        page: Optional[int] = None,
+        page_size: Optional[int] = None,
+        order_by: Optional[str] = None,
+        filter_expr: Optional[str] = None,
+        fields: Optional[str] = None,
+    ) -> AssetResponse:
+        """Get assets with optional filtering and pagination.
+
+        Args:
+            page: Page number (1-based)
+            page_size: Number of items per page (1-50)
+            order_by: Sort order (e.g., 'Name desc', 'createdDate asc')
+            filter_expr: Filter expression using SFMC operators (eq, neq, lt, lte, gt, gte, like)
+            fields: Comma-separated list of fields to return
+
+        Returns:
+            AssetResponse with paginated results
+        """
+        params = {}
+
+        if page is not None:
+            params["$page"] = page
+        if page_size is not None:
+            params["$pageSize"] = page_size
+        if order_by is not None:
+            params["$orderBy"] = order_by
+        if filter_expr is not None:
+            params["$filter"] = filter_expr
+        if fields is not None:
+            params["$fields"] = fields
+
+        response_data = self._client.get("/asset/v1/content/assets", params=params)
+        return AssetResponse(**response_data)
+
+
+class AsyncQueryClient:
+    """Asynchronous client for Content Builder asset query operations."""
+
+    def __init__(self, client: "AsyncSFMCClient"):
+        self._client = client
+
+    async def get_asset_by_id(self, asset_id: int) -> Asset:
+        """Get a specific asset by ID.
+
+        Args:
+            asset_id: The asset ID to retrieve
+
+        Returns:
+            Asset model instance
+        """
+        response_data = await self._client.get(f"/asset/v1/content/assets/{asset_id}")
+        return Asset(**response_data)
+
+    async def get_assets(
+        self,
+        page: Optional[int] = None,
+        page_size: Optional[int] = None,
+        order_by: Optional[str] = None,
+        filter_expr: Optional[str] = None,
+        fields: Optional[str] = None,
+    ) -> AssetResponse:
+        """Get assets with optional filtering and pagination.
+
+        Args:
+            page: Page number (1-based)
+            page_size: Number of items per page (1-50)
+            order_by: Sort order (e.g., 'Name desc', 'createdDate asc')
+            filter_expr: Filter expression using SFMC operators (eq, neq, lt, lte, gt, gte, like)
+            fields: Comma-separated list of fields to return
+
+        Returns:
+            AssetResponse with paginated results
+        """
+        params = {}
+
+        if page is not None:
+            params["$page"] = page
+        if page_size is not None:
+            params["$pageSize"] = page_size
+        if order_by is not None:
+            params["$orderBy"] = order_by
+        if filter_expr is not None:
+            params["$filter"] = filter_expr
+        if fields is not None:
+            params["$fields"] = fields
+
+        response_data = await self._client.get(
+            "/asset/v1/content/assets", params=params
+        )
+        return AssetResponse(**response_data)
