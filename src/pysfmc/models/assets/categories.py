@@ -15,12 +15,12 @@ class Category(BaseModel):
     id: int = Field(..., description="Category ID")
     name: str = Field(..., description="Category name")
     description: Optional[str] = Field(None, description="Category description")
-    parent_id: int = Field(..., alias="parentId", description="Parent category ID")
-    category_type: str = Field(
-        ..., alias="categoryType", description="Category type (e.g., 'asset')"
+    parent_id: Optional[int] = Field(None, alias="parentId", description="Parent category ID")
+    category_type: Optional[str] = Field(
+        None, alias="categoryType", description="Category type (e.g., 'asset')"
     )
-    enterprise_id: int = Field(..., alias="enterpriseId", description="Enterprise ID")
-    member_id: int = Field(..., alias="memberId", description="Member ID")
+    enterprise_id: Optional[int] = Field(None, alias="enterpriseId", description="Enterprise ID")
+    member_id: Optional[int] = Field(None, alias="memberId", description="Member ID")
 
 
 class CategoryCreate(BaseModel):

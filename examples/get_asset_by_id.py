@@ -1,12 +1,14 @@
 """Example: Get asset by ID using SFMC Assets Query API."""
+from dotenv import load_dotenv
 
 from pysfmc import SFMCClient
 
 # Example asset ID - replace with actual asset ID from your SFMC instance
-ASSET_ID = 140839
+ASSET_ID = 141754
 
 
 def main():
+    load_dotenv()
     """Get a specific asset by ID."""
     with SFMCClient() as client:
         # Get asset by ID
