@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 from ..base import SFMC_MODEL_CONFIG
+from .categories import Category
 
 
 class AssetType(BaseModel):
@@ -37,17 +38,6 @@ class Status(BaseModel):
     id: Optional[int] = Field(None, description="Status ID")
     name: Optional[str] = Field(None, description="Status name")
 
-
-class Category(BaseModel):
-    """Model for SFMC asset category information."""
-
-    model_config = SFMC_MODEL_CONFIG
-
-    id: Optional[int] = Field(None, description="Category ID")
-    parent_id: Optional[int] = Field(
-        None, alias="parentId", description="Parent category ID"
-    )
-    name: Optional[str] = Field(None, description="Category name")
 
 
 class Asset(BaseModel):

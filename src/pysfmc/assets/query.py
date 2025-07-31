@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING, Optional
 
-from ..models.assets import Asset, AssetResponse
+from ..models.assets import Asset, AssetFilter, AssetResponse
 
 if TYPE_CHECKING:
     from ..client import AsyncSFMCClient, SFMCClient
@@ -46,18 +46,15 @@ class QueryClient:
         Returns:
             AssetResponse with paginated results
         """
-        params = {}
-
-        if page is not None:
-            params["$page"] = page
-        if page_size is not None:
-            params["$pageSize"] = page_size
-        if order_by is not None:
-            params["$orderBy"] = order_by
-        if filter_expr is not None:
-            params["$filter"] = filter_expr
-        if fields is not None:
-            params["$fields"] = fields
+        # Create filter model and serialize to params
+        filter_model = AssetFilter(
+            page=page,
+            page_size=page_size,
+            order_by=order_by,
+            filter=filter_expr,
+            fields=fields,
+        )
+        params = filter_model.model_dump(by_alias=True, exclude_none=True)
 
         response_data = self._client.get("/asset/v1/content/assets", params=params)
         return AssetResponse(**response_data)
@@ -101,18 +98,15 @@ class AsyncQueryClient:
         Returns:
             AssetResponse with paginated results
         """
-        params = {}
-
-        if page is not None:
-            params["$page"] = page
-        if page_size is not None:
-            params["$pageSize"] = page_size
-        if order_by is not None:
-            params["$orderBy"] = order_by
-        if filter_expr is not None:
-            params["$filter"] = filter_expr
-        if fields is not None:
-            params["$fields"] = fields
+        # Create filter model and serialize to params
+        filter_model = AssetFilter(
+            page=page,
+            page_size=page_size,
+            order_by=order_by,
+            filter=filter_expr,
+            fields=fields,
+        )
+        params = filter_model.model_dump(by_alias=True, exclude_none=True)
 
         response_data = await self._client.get(
             "/asset/v1/content/assets", params=params

@@ -1,13 +1,11 @@
 """Assets models for SFMC API."""
 
-from .assets import (Asset, AssetFilter, AssetResponse, AssetType, Category,
-                     Owner, Status)
-from .categories import Category as CategoryModel
-from .categories import CategoryCreate, CategoryFilter, CategoryResponse
+from .assets import Asset, AssetFilter, AssetResponse, AssetType, Owner, Status
+from .categories import Category, CategoryCreate, CategoryFilter, CategoryResponse
 
 __all__ = [
     # Category models
-    "CategoryModel",
+    "Category",
     "CategoryCreate",
     "CategoryResponse",
     "CategoryFilter",
@@ -18,5 +16,4 @@ __all__ = [
     "AssetType",
     "Owner",
     "Status",
-    "Category",
 ]

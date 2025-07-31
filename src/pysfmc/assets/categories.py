@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING, Optional
 
-from ..models.assets import Category, CategoryCreate, CategoryResponse
+from ..models.assets import Category, CategoryCreate, CategoryFilter, CategoryResponse
 
 if TYPE_CHECKING:
     from ..client import AsyncSFMCClient, SFMCClient
@@ -36,25 +36,24 @@ class CategoriesClient:
         Returns:
             CategoryResponse with paginated results
         """
-        params = {}
-
-        if page is not None:
-            params["$page"] = page
-        if page_size is not None:
-            params["$pageSize"] = page_size
-        if order_by is not None:
-            params["$orderBy"] = order_by
-        if filter_expr is not None:
-            params["$filter"] = filter_expr
-        if scope is not None:
-            params["scope"] = scope
+        # Build filter expression combining filter_expr and parent_id
+        combined_filter = filter_expr
         if parent_id is not None:
-            # Add parent_id to filter expression
             parent_filter = f"parentId eq {parent_id}"
             if filter_expr:
-                params["$filter"] = f"({filter_expr}) and ({parent_filter})"
+                combined_filter = f"({filter_expr}) and ({parent_filter})"
             else:
-                params["$filter"] = parent_filter
+                combined_filter = parent_filter
+
+        # Create filter model and serialize to params
+        filter_model = CategoryFilter(
+            page=page,
+            page_size=page_size,
+            order_by=order_by,
+            filter=combined_filter,
+            scope=scope,
+        )
+        params = filter_model.model_dump(by_alias=True, exclude_none=True)
 
         response_data = self._client.get("/asset/v1/content/categories", params=params)
         return CategoryResponse(**response_data)
@@ -121,25 +120,24 @@ class AsyncCategoriesClient:
         Returns:
             CategoryResponse with paginated results
         """
-        params = {}
-
-        if page is not None:
-            params["$page"] = page
-        if page_size is not None:
-            params["$pageSize"] = page_size
-        if order_by is not None:
-            params["$orderBy"] = order_by
-        if filter_expr is not None:
-            params["$filter"] = filter_expr
-        if scope is not None:
-            params["scope"] = scope
+        # Build filter expression combining filter_expr and parent_id
+        combined_filter = filter_expr
         if parent_id is not None:
-            # Add parent_id to filter expression
             parent_filter = f"parentId eq {parent_id}"
             if filter_expr:
-                params["$filter"] = f"({filter_expr}) and ({parent_filter})"
+                combined_filter = f"({filter_expr}) and ({parent_filter})"
             else:
-                params["$filter"] = parent_filter
+                combined_filter = parent_filter
+
+        # Create filter model and serialize to params
+        filter_model = CategoryFilter(
+            page=page,
+            page_size=page_size,
+            order_by=order_by,
+            filter=combined_filter,
+            scope=scope,
+        )
+        params = filter_model.model_dump(by_alias=True, exclude_none=True)
 
         response_data = await self._client.get(
             "/asset/v1/content/categories", params=params
