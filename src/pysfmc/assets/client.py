@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING, Optional
 
 from .categories import AsyncCategoriesClient, CategoriesClient
+from .content import AsyncContentClient, ContentClient
 from .query import AsyncQueryClient, QueryClient
 
 if TYPE_CHECKING:
@@ -15,6 +16,7 @@ class AssetsClient:
     def __init__(self, client: "SFMCClient"):
         self._client = client
         self._categories: Optional[CategoriesClient] = None
+        self._content: Optional[ContentClient] = None
         self._query: Optional[QueryClient] = None
 
     @property
@@ -23,6 +25,13 @@ class AssetsClient:
         if self._categories is None:
             self._categories = CategoriesClient(self._client)
         return self._categories
+
+    @property
+    def content(self) -> ContentClient:
+        """Access to asset content operations."""
+        if self._content is None:
+            self._content = ContentClient(self._client)
+        return self._content
 
     @property
     def query(self) -> QueryClient:
@@ -38,6 +47,7 @@ class AsyncAssetsClient:
     def __init__(self, client: "AsyncSFMCClient"):
         self._client = client
         self._categories: Optional[AsyncCategoriesClient] = None
+        self._content: Optional[AsyncContentClient] = None
         self._query: Optional[AsyncQueryClient] = None
 
     @property
@@ -46,6 +56,13 @@ class AsyncAssetsClient:
         if self._categories is None:
             self._categories = AsyncCategoriesClient(self._client)
         return self._categories
+
+    @property
+    def content(self) -> AsyncContentClient:
+        """Access to asset content operations."""
+        if self._content is None:
+            self._content = AsyncContentClient(self._client)
+        return self._content
 
     @property
     def query(self) -> AsyncQueryClient:
