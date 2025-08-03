@@ -1,4 +1,5 @@
 """Example: Get asset by ID using SFMC Assets Query API."""
+
 from dotenv import load_dotenv
 
 from pysfmc import SFMCClient
