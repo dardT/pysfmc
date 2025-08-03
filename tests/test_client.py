@@ -5,6 +5,7 @@ import pytest
 import respx
 
 from pysfmc import SFMCClient, SFMCSettings
+from pysfmc.exceptions import SFMCAuthenticationError, SFMCNotFoundError
 
 
 class TestSFMCClient:
@@ -23,9 +24,7 @@ class TestSFMCClient:
     def test_get_categories_success(self):
         """Test successful retrieval of asset categories."""
         # Mock the authentication token request
-        auth_url = (
-            f"https://{self.settings.subdomain}.auth.marketingcloudapis.com/v2/token"
-        )
+        auth_url = f"https://{self.settings.subdomain.get_secret_value()}.auth.marketingcloudapis.com/v2/token"
         auth_response = {
             "access_token": "mock_access_token_12345",
             "token_type": "Bearer",
@@ -81,27 +80,23 @@ class TestSFMCClient:
     def test_get_categories_authentication_error(self):
         """Test handling of authentication errors."""
         # Mock failed authentication
-        auth_url = (
-            f"https://{self.settings.subdomain}.auth.marketingcloudapis.com/v2/token"
-        )
+        auth_url = f"https://{self.settings.subdomain.get_secret_value()}.auth.marketingcloudapis.com/v2/token"
         respx.post(auth_url).mock(
             return_value=httpx.Response(401, json={"message": "Invalid credentials"})
         )
 
         # Test that authentication error is raised
-        from pysfmc.exceptions import SFMCAuthenticationError
-
-        with pytest.raises(SFMCAuthenticationError):
-            with SFMCClient(settings=self.settings) as client:
-                client.get("/asset/v1/content/categories")
+        with (
+            pytest.raises(SFMCAuthenticationError),
+            SFMCClient(settings=self.settings) as client,
+        ):
+            client.get("/asset/v1/content/categories")
 
     @respx.mock
     def test_get_categories_not_found(self):
         """Test handling of 404 errors."""
         # Mock successful authentication
-        auth_url = (
-            f"https://{self.settings.subdomain}.auth.marketingcloudapis.com/v2/token"
-        )
+        auth_url = f"https://{self.settings.subdomain.get_secret_value()}.auth.marketingcloudapis.com/v2/token"
         auth_response = {
             "access_token": "mock_access_token_12345",
             "token_type": "Bearer",
@@ -121,19 +116,17 @@ class TestSFMCClient:
         )
 
         # Test that not found error is raised
-        from pysfmc.exceptions import SFMCNotFoundError
-
-        with pytest.raises(SFMCNotFoundError):
-            with SFMCClient(settings=self.settings) as client:
-                client.get("/asset/v1/content/categories")
+        with (
+            pytest.raises(SFMCNotFoundError),
+            SFMCClient(settings=self.settings) as client,
+        ):
+            client.get("/asset/v1/content/categories")
 
     @respx.mock
     def test_get_categories_with_params(self):
         """Test categories request with query parameters."""
         # Mock authentication
-        auth_url = (
-            f"https://{self.settings.subdomain}.auth.marketingcloudapis.com/v2/token"
-        )
+        auth_url = f"https://{self.settings.subdomain.get_secret_value()}.auth.marketingcloudapis.com/v2/token"
         auth_response = {
             "access_token": "mock_access_token_12345",
             "token_type": "Bearer",
