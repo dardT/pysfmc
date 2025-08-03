@@ -1,6 +1,6 @@
 """Exception classes for SFMC API client."""
 
-from typing import Optional
+import contextlib
 
 import httpx
 
@@ -8,7 +8,7 @@ import httpx
 class SFMCError(Exception):
     """Base exception for all SFMC API errors."""
 
-    def __init__(self, message: str, response: Optional[httpx.Response] = None):
+    def __init__(self, message: str, response: httpx.Response | None = None):
         super().__init__(message)
         self.response = response
         self.status_code = response.status_code if response else None
@@ -44,8 +44,8 @@ class SFMCRateLimitError(SFMCError):
     def __init__(
         self,
         message: str,
-        response: Optional[httpx.Response] = None,
-        retry_after: Optional[int] = None,
+        response: httpx.Response | None = None,
+        retry_after: int | None = None,
     ):
         super().__init__(message, response)
         self.retry_after = retry_after
@@ -84,10 +84,8 @@ def map_http_error(response: httpx.Response) -> SFMCError:
     elif status_code == 429:
         retry_after = None
         if "retry-after" in response.headers:
-            try:
+            with contextlib.suppress(ValueError):
                 retry_after = int(response.headers["retry-after"])
-            except ValueError:
-                pass
         return SFMCRateLimitError(message, response, retry_after)
     elif 500 <= status_code < 600:
         return SFMCServerError(message, response)
