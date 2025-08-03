@@ -1,6 +1,6 @@
 """Categories client for SFMC Assets (Content Builder) API."""
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from ..models.assets import Category, CategoryCreate, CategoryFilter, CategoryResponse
 
@@ -16,12 +16,12 @@ class CategoriesClient:
 
     def get_categories(
         self,
-        page: Optional[int] = None,
-        page_size: Optional[int] = None,
-        order_by: Optional[str] = None,
-        filter_expr: Optional[str] = None,
-        scope: Optional[str] = None,
-        parent_id: Optional[int] = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        order_by: str | None = None,
+        filter_expr: str | None = None,
+        scope: str | None = None,
+        parent_id: int | None = None,
     ) -> CategoryResponse:
         """Get categories with optional filtering and pagination.
 
@@ -29,7 +29,7 @@ class CategoriesClient:
             page: Page number (1-based)
             page_size: Number of items per page (1-50)
             order_by: Sort order (e.g., 'name asc', 'name desc')
-            filter_expr: Filter expression (only 'parentId eq <value>' is supported by SFMC API)
+            filter_expr: Filter expression (only 'parentId eq <value>' supported)
             scope: Scope filter (e.g., 'Shared')
             parent_id: Filter by parent category ID
 
@@ -100,12 +100,12 @@ class AsyncCategoriesClient:
 
     async def get_categories(
         self,
-        page: Optional[int] = None,
-        page_size: Optional[int] = None,
-        order_by: Optional[str] = None,
-        filter_expr: Optional[str] = None,
-        scope: Optional[str] = None,
-        parent_id: Optional[int] = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        order_by: str | None = None,
+        filter_expr: str | None = None,
+        scope: str | None = None,
+        parent_id: int | None = None,
     ) -> CategoryResponse:
         """Get categories with optional filtering and pagination.
 
@@ -113,7 +113,7 @@ class AsyncCategoriesClient:
             page: Page number (1-based)
             page_size: Number of items per page (1-50)
             order_by: Sort order (e.g., 'name asc', 'name desc')
-            filter_expr: Filter expression (only 'parentId eq <value>' is supported by SFMC API)
+            filter_expr: Filter expression (only 'parentId eq <value>' supported)
             scope: Scope filter (e.g., 'Shared')
             parent_id: Filter by parent category ID
 

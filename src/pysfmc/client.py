@@ -1,7 +1,7 @@
 """HTTP client implementations for SFMC API."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Union
+from typing import Any
 from urllib.parse import urljoin
 
 import httpx
@@ -14,31 +14,31 @@ from .exceptions import SFMCConnectionError, map_http_error
 class BaseClient(ABC):
     """Abstract base class for SFMC API clients."""
 
-    def __init__(self, settings: Optional[SFMCSettings] = None):
+    def __init__(self, settings: SFMCSettings | None = None):
         self.settings = settings or SFMCSettings()
 
     @abstractmethod
-    def get(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def get(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a GET request."""
         pass
 
     @abstractmethod
-    def post(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def post(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a POST request."""
         pass
 
     @abstractmethod
-    def put(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def put(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a PUT request."""
         pass
 
     @abstractmethod
-    def patch(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def patch(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a PATCH request."""
         pass
 
     @abstractmethod
-    def delete(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def delete(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a DELETE request."""
         pass
 
@@ -53,8 +53,8 @@ class SFMCClient(BaseClient):
 
     def __init__(
         self,
-        settings: Optional[SFMCSettings] = None,
-        http_client: Optional[httpx.Client] = None,
+        settings: SFMCSettings | None = None,
+        http_client: httpx.Client | None = None,
         timeout: float = 30.0,
     ):
         super().__init__(settings)
@@ -66,11 +66,11 @@ class SFMCClient(BaseClient):
         self,
         method: str,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
-        params: Optional[Dict[str, Any]] = None,
-        headers: Optional[Dict[str, str]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
+        params: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make an authenticated HTTP request."""
         # Get base URL and auth headers
         base_url = self._authenticator.get_rest_base_url()
@@ -117,39 +117,39 @@ class SFMCClient(BaseClient):
             raise SFMCConnectionError(f"Connection error: {e}") from e
 
     def get(
-        self, endpoint: str, params: Optional[Dict[str, Any]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a GET request."""
         return self._make_request("GET", endpoint, params=params, **kwargs)
 
     def post(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a POST request."""
         return self._make_request("POST", endpoint, json=json, **kwargs)
 
     def put(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a PUT request."""
         return self._make_request("PUT", endpoint, json=json, **kwargs)
 
     def patch(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a PATCH request."""
         return self._make_request("PATCH", endpoint, json=json, **kwargs)
 
-    def delete(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    def delete(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a DELETE request."""
         return self._make_request("DELETE", endpoint, **kwargs)
 
@@ -157,7 +157,7 @@ class SFMCClient(BaseClient):
     def assets(self):
         """Access to Assets (Content Builder) API operations."""
         if self._assets is None:
-            from .assets import AssetsClient
+            from .assets import AssetsClient  # noqa: PLC0415
 
             self._assets = AssetsClient(self)
         return self._assets
@@ -179,8 +179,8 @@ class AsyncSFMCClient(BaseClient):
 
     def __init__(
         self,
-        settings: Optional[SFMCSettings] = None,
-        http_client: Optional[httpx.AsyncClient] = None,
+        settings: SFMCSettings | None = None,
+        http_client: httpx.AsyncClient | None = None,
         timeout: float = 30.0,
     ):
         super().__init__(settings)
@@ -192,11 +192,11 @@ class AsyncSFMCClient(BaseClient):
         self,
         method: str,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
-        params: Optional[Dict[str, Any]] = None,
-        headers: Optional[Dict[str, str]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
+        params: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make an authenticated HTTP request."""
         # Get base URL and auth headers
         base_url = await self._authenticator.get_rest_base_url()
@@ -243,39 +243,39 @@ class AsyncSFMCClient(BaseClient):
             raise SFMCConnectionError(f"Connection error: {e}") from e
 
     async def get(
-        self, endpoint: str, params: Optional[Dict[str, Any]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a GET request."""
         return await self._make_request("GET", endpoint, params=params, **kwargs)
 
     async def post(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a POST request."""
         return await self._make_request("POST", endpoint, json=json, **kwargs)
 
     async def put(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a PUT request."""
         return await self._make_request("PUT", endpoint, json=json, **kwargs)
 
     async def patch(
         self,
         endpoint: str,
-        json: Optional[Union[Dict[str, Any], BaseModel]] = None,
+        json: dict[str, Any] | BaseModel | None = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a PATCH request."""
         return await self._make_request("PATCH", endpoint, json=json, **kwargs)
 
-    async def delete(self, endpoint: str, **kwargs) -> Dict[str, Any]:
+    async def delete(self, endpoint: str, **kwargs) -> dict[str, Any]:
         """Make a DELETE request."""
         return await self._make_request("DELETE", endpoint, **kwargs)
 
@@ -283,7 +283,7 @@ class AsyncSFMCClient(BaseClient):
     def assets(self):
         """Access to Assets (Content Builder) API operations."""
         if self._assets is None:
-            from .assets import AsyncAssetsClient
+            from .assets import AsyncAssetsClient  # noqa: PLC0415
 
             self._assets = AsyncAssetsClient(self)
         return self._assets

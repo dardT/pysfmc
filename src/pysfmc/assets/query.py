@@ -1,6 +1,6 @@
 """Query client for SFMC Assets (Content Builder) API."""
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from ..models.assets import Asset, AssetFilter, AssetResponse
 
@@ -28,11 +28,11 @@ class QueryClient:
 
     def get_assets(
         self,
-        page: Optional[int] = None,
-        page_size: Optional[int] = None,
-        order_by: Optional[str] = None,
-        filter_expr: Optional[str] = None,
-        fields: Optional[str] = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        order_by: str | None = None,
+        filter_expr: str | None = None,
+        fields: str | None = None,
     ) -> AssetResponse:
         """Get assets with optional filtering and pagination.
 
@@ -40,7 +40,8 @@ class QueryClient:
             page: Page number (1-based)
             page_size: Number of items per page (1-50)
             order_by: Sort order (e.g., 'Name desc', 'createdDate asc')
-            filter_expr: Filter expression using SFMC operators (eq, neq, lt, lte, gt, gte, like)
+            filter_expr: Filter expression using SFMC operators
+                (eq, neq, lt, lte, gt, gte, like)
             fields: Comma-separated list of fields to return
 
         Returns:
@@ -80,11 +81,11 @@ class AsyncQueryClient:
 
     async def get_assets(
         self,
-        page: Optional[int] = None,
-        page_size: Optional[int] = None,
-        order_by: Optional[str] = None,
-        filter_expr: Optional[str] = None,
-        fields: Optional[str] = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        order_by: str | None = None,
+        filter_expr: str | None = None,
+        fields: str | None = None,
     ) -> AssetResponse:
         """Get assets with optional filtering and pagination.
 
@@ -92,7 +93,8 @@ class AsyncQueryClient:
             page: Page number (1-based)
             page_size: Number of items per page (1-50)
             order_by: Sort order (e.g., 'Name desc', 'createdDate asc')
-            filter_expr: Filter expression using SFMC operators (eq, neq, lt, lte, gt, gte, like)
+            filter_expr: Filter expression using SFMC operators
+                (eq, neq, lt, lte, gt, gte, like)
             fields: Comma-separated list of fields to return
 
         Returns:

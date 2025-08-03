@@ -1,7 +1,6 @@
 """Authentication module for Salesforce Marketing Cloud API."""
 
 from datetime import datetime, timedelta
-from typing import Optional
 from urllib.parse import urljoin
 
 import httpx
@@ -48,13 +47,11 @@ class TokenResponse(BaseModel):
 class SFMCAuthenticator:
     """Handles SFMC OAuth2 authentication and token management."""
 
-    def __init__(
-        self, settings: SFMCSettings, http_client: Optional[httpx.Client] = None
-    ):
+    def __init__(self, settings: SFMCSettings, http_client: httpx.Client | None = None):
         self.settings = settings
         self._http_client = http_client or httpx.Client()
-        self._token: Optional[TokenResponse] = None
-        self._token_expires_at: Optional[datetime] = None
+        self._token: TokenResponse | None = None
+        self._token_expires_at: datetime | None = None
         self._refresh_buffer = timedelta(minutes=2)  # Refresh 2 minutes before expiry
 
     def _is_token_valid(self) -> bool:
@@ -120,12 +117,12 @@ class AsyncSFMCAuthenticator:
     """Async version of SFMC authenticator."""
 
     def __init__(
-        self, settings: SFMCSettings, http_client: Optional[httpx.AsyncClient] = None
+        self, settings: SFMCSettings, http_client: httpx.AsyncClient | None = None
     ):
         self.settings = settings
         self._http_client = http_client or httpx.AsyncClient()
-        self._token: Optional[TokenResponse] = None
-        self._token_expires_at: Optional[datetime] = None
+        self._token: TokenResponse | None = None
+        self._token_expires_at: datetime | None = None
         self._refresh_buffer = timedelta(minutes=2)
 
     def _is_token_valid(self) -> bool:

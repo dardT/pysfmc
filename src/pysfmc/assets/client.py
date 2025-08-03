@@ -1,6 +1,6 @@
 """Main Assets client for SFMC Assets (Content Builder) API."""
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from .categories import AsyncCategoriesClient, CategoriesClient
 from .content import AsyncContentClient, ContentClient
@@ -15,9 +15,9 @@ class AssetsClient:
 
     def __init__(self, client: "SFMCClient"):
         self._client = client
-        self._categories: Optional[CategoriesClient] = None
-        self._content: Optional[ContentClient] = None
-        self._query: Optional[QueryClient] = None
+        self._categories: CategoriesClient | None = None
+        self._content: ContentClient | None = None
+        self._query: QueryClient | None = None
 
     @property
     def categories(self) -> CategoriesClient:
@@ -46,9 +46,9 @@ class AsyncAssetsClient:
 
     def __init__(self, client: "AsyncSFMCClient"):
         self._client = client
-        self._categories: Optional[AsyncCategoriesClient] = None
-        self._content: Optional[AsyncContentClient] = None
-        self._query: Optional[AsyncQueryClient] = None
+        self._categories: AsyncCategoriesClient | None = None
+        self._content: AsyncContentClient | None = None
+        self._query: AsyncQueryClient | None = None
 
     @property
     def categories(self) -> AsyncCategoriesClient:

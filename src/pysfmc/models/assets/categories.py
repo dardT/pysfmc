@@ -1,7 +1,5 @@
 """Category models for SFMC Assets (Content Builder) API."""
 
-from typing import List, Optional
-
 from pydantic import BaseModel, Field
 
 from ..base import SFMC_MODEL_CONFIG
@@ -14,13 +12,17 @@ class Category(BaseModel):
 
     id: int = Field(..., description="Category ID")
     name: str = Field(..., description="Category name")
-    description: Optional[str] = Field(None, description="Category description")
-    parent_id: Optional[int] = Field(None, alias="parentId", description="Parent category ID")
-    category_type: Optional[str] = Field(
+    description: str | None = Field(None, description="Category description")
+    parent_id: int | None = Field(
+        None, alias="parentId", description="Parent category ID"
+    )
+    category_type: str | None = Field(
         None, alias="categoryType", description="Category type (e.g., 'asset')"
     )
-    enterprise_id: Optional[int] = Field(None, alias="enterpriseId", description="Enterprise ID")
-    member_id: Optional[int] = Field(None, alias="memberId", description="Member ID")
+    enterprise_id: int | None = Field(
+        None, alias="enterpriseId", description="Enterprise ID"
+    )
+    member_id: int | None = Field(None, alias="memberId", description="Member ID")
 
 
 class CategoryCreate(BaseModel):
@@ -42,7 +44,7 @@ class CategoryResponse(BaseModel):
     page_size: int = Field(
         ..., alias="pageSize", description="Number of items per page"
     )
-    items: List[Category] = Field(
+    items: list[Category] = Field(
         default_factory=list, description="List of categories"
     )
     links: dict = Field(default_factory=dict, description="Pagination links")
@@ -53,17 +55,17 @@ class CategoryFilter(BaseModel):
 
     model_config = SFMC_MODEL_CONFIG
 
-    page: Optional[int] = Field(None, alias="$page", description="Page number", ge=1)
-    page_size: Optional[int] = Field(
+    page: int | None = Field(None, alias="$page", description="Page number", ge=1)
+    page_size: int | None = Field(
         None, alias="$pageSize", description="Items per page", ge=1, le=50
     )
-    order_by: Optional[str] = Field(
+    order_by: str | None = Field(
         None, alias="$orderBy", description="Sort order (e.g., 'name asc')"
     )
-    filter: Optional[str] = Field(
+    filter: str | None = Field(
         None,
         alias="$filter",
         description="Filter expression (only 'parentId eq <value>' is supported)",
     )
-    scope: Optional[str] = Field(None, description="Scope (e.g., 'Shared')")
-    parent_id: Optional[int] = Field(None, description="Filter by parent ID")
+    scope: str | None = Field(None, description="Scope (e.g., 'Shared')")
+    parent_id: int | None = Field(None, description="Filter by parent ID")
