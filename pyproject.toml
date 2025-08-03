@@ -29,7 +29,7 @@ dev = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py310"
+target-version = "py39"
 exclude = ["examples/"]
 
 [tool.ruff.lint]
