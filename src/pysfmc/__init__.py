@@ -4,11 +4,23 @@ from .assets import AssetsClient, AsyncAssetsClient
 from .auth import SFMCSettings
 from .client import AsyncSFMCClient, SFMCClient
 from .config import SFMCConfig
-from .exceptions import (SFMCAuthenticationError, SFMCAuthorizationError,
-                         SFMCConnectionError, SFMCError, SFMCNotFoundError,
-                         SFMCRateLimitError, SFMCServerError,
-                         SFMCValidationError)
-from .models.assets import Category, CategoryCreate, CategoryResponse
+from .exceptions import (
+    SFMCAuthenticationError,
+    SFMCAuthorizationError,
+    SFMCConnectionError,
+    SFMCError,
+    SFMCNotFoundError,
+    SFMCRateLimitError,
+    SFMCServerError,
+    SFMCValidationError,
+)
+from .models.assets import (
+    AssetTypeCreate,
+    Category,
+    CategoryCreate,
+    CategoryResponse,
+    CreateAsset,
+)
 
 __version__ = "0.1.0"
 
@@ -25,6 +37,8 @@ __all__ = [
     "Category",
     "CategoryCreate",
     "CategoryResponse",
+    "CreateAsset",
+    "AssetTypeCreate",
     # Exceptions
     "SFMCError",
     "SFMCAuthenticationError",
