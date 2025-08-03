@@ -49,7 +49,8 @@ def sync_demo():
             # Filter categories by parent ID
             print("\n3. Getting child categories of root folder:")
             root_categories = client.assets.categories.get_categories(
-                parent_id=0, page_size=5  # Root level
+                parent_id=0,
+                page_size=5,  # Root level
             )
 
             print(f"Root level categories: {len(root_categories.items)}")
