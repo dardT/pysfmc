@@ -5,6 +5,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from ..base import SFMC_MODEL_CONFIG
+from .asset_types import ASSET_TYPE_MAPPING
 from .categories import Category
 
 
@@ -18,6 +19,20 @@ class AssetType(BaseModel):
     display_name: str | None = Field(
         None, alias="displayName", description="Asset type display name"
     )
+
+    @classmethod
+    def from_name(cls, name: str) -> "AssetType":
+        if not cls.has_name(name):
+            raise KeyError(
+                f"Asset name '{name}' is unknown. "
+                f"Available names are in {ASSET_TYPE_MAPPING.keys()}"
+            )
+
+        return cls(name=name, id=ASSET_TYPE_MAPPING[name], displayName=None)
+
+    @classmethod
+    def has_name(cls, name: str) -> bool:
+        return name in ASSET_TYPE_MAPPING
 
 
 class Owner(BaseModel):
