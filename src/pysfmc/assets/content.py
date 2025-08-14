@@ -1,6 +1,6 @@
 """Content client for SFMC Assets (Content Builder) API."""
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 from ..models.assets import Asset, AssetTypeCreate, CreateAsset
 
@@ -100,6 +100,10 @@ class ContentClient:
         response_data = self._client.post("/asset/v1/content/assets", json=create_asset)
         return Asset(**response_data)
 
+    def delete_asset(self, asset_id: int) -> Literal["OK"]:
+        response = self._client.delete(f"/asset/v1/content/assets/{asset_id}")
+        return response  # type: ignore
+
 
 class AsyncContentClient:
     """Asynchronous client for Content Builder asset content operations."""
@@ -194,3 +198,9 @@ class AsyncContentClient:
             "/asset/v1/content/assets", json=create_asset
         )
         return Asset(**response_data)
+
+    async def delete_asset(self, asset_id: int) -> Literal["OK"]:
+        response_data = await self._client.delete(
+            f"/asset/v1/content/assets/{asset_id}"
+        )
+        return response_data  # type: ignore
