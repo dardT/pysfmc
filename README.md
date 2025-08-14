@@ -17,13 +17,13 @@ As of right now, only parts of the [Content Builder REST API](https://developer.
 is implemented:
 
 | HTTP Method | Resource | Description | Supported |
-|-------------|----------|-------------|-----------|
+|-------------|----------|-------------|----------|
 | GET | `/asset/v1/content/assets` | Gets an asset collection with filtering and pagination. | ✅ |
 | GET | `/asset/v1/content/assets/{id}` | Gets an asset by ID. | ✅ |
 | POST | `/asset/v1/content/assets` | Inserts an asset. | ✅ |
 | PUT | `/asset/v1/content/assets/{id}` | Updates a full asset. | ❌ |
 | PATCH | `/asset/v1/content/assets/{id}` | Updates part of an asset deleted in the last 30 days. | ❌ |
-| DELETE | `/asset/v1/content/assets/{id}` | Deletes an asset. | ❌ |
+| DELETE | `/asset/v1/content/assets/{id}` | Deletes an asset. | ✅ |
 | GET | `/asset/v1/content/assets/{id}/file` | Gets the binary file for an asset. | ❌ |
 | GET | `/asset/v1/content/assets/salutations` | Gets the default header and footer for an account. | ❌ |
 | GET | `/asset/v1/content/assets/{id}/salutations` | Gets the header and footer for a message. | ❌ |
@@ -32,7 +32,7 @@ is implemented:
 | GET | `/asset/v1/content/categories` | Gets a collection of categories. | ✅ |
 | GET | `/asset/v1/content/categories/{id}` | Gets a category by ID. | ✅ |
 | PUT | `/asset/v1/content/categories/{id}` | Updates a category by ID. | ❌ |
-| DELETE | `/asset/v1/content/categories/{id}` | Deletes a category by ID. | ❌ |
+| DELETE | `/asset/v1/content/categories/{id}` | Deletes a category by ID. | ✅ |
 
 
 ## Installation
