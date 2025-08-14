@@ -1,6 +1,6 @@
 """Categories client for SFMC Assets (Content Builder) API."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from ..models.assets import Category, CategoryCreate, CategoryFilter, CategoryResponse
 
@@ -90,6 +90,9 @@ class CategoriesClient:
             "/asset/v1/content/categories", json=category_data
         )
         return Category(**response_data)
+
+    def delete_category_by_id(self, category_id: int) -> Literal["OK"]:
+        return self._client.delete(f"/asset/v1/content/categories/{category_id}")  # type: ignore
 
 
 class AsyncCategoriesClient:
@@ -181,3 +184,9 @@ class AsyncCategoriesClient:
             "/asset/v1/content/categories", json=category_data
         )
         return Category(**response_data)
+
+    async def delete_category_by_id(self, category_id: int) -> Literal["OK"]:
+        response = await self._client.delete(
+            f"/asset/v1/content/categories/{category_id}"
+        )
+        return response  # type: ignore

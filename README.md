@@ -32,7 +32,7 @@ is implemented:
 | GET | `/asset/v1/content/categories` | Gets a collection of categories. | ✅ |
 | GET | `/asset/v1/content/categories/{id}` | Gets a category by ID. | ✅ |
 | PUT | `/asset/v1/content/categories/{id}` | Updates a category by ID. | ❌ |
-| DELETE | `/asset/v1/content/categories/{id}` | Deletes a category by ID. | ❌ |
+| DELETE | `/asset/v1/content/categories/{id}` | Deletes a category by ID. | ✅ |
 
 
 ## Installation
