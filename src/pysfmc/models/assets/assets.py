@@ -228,10 +228,12 @@ class CreateAsset(BaseModel):
     model_config = SFMC_MODEL_CONFIG
 
     # Required fields
-    customer_key: str = Field(
-        ..., alias="customerKey", description="Customer key reference"
+    customer_key: str | None = Field(
+        None, alias="customerKey", description="Customer key reference"
     )
-    content_type: str = Field(..., alias="contentType", description="Content type")
+    content_type: str | None = Field(
+        None, alias="contentType", description="Content type"
+    )
     asset_type: AssetTypeCreate = Field(
         ..., alias="assetType", description="Asset type info"
     )
