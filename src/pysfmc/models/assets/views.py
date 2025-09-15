@@ -4,88 +4,46 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from ..base import SFMC_MODEL_CONFIG
-from .blocks import Slot
+from pysfmc.models.assets.blocks import Slot
+from pysfmc.models.base import SFMC_MODEL_CONFIG
 
 
-class TemplateReference(BaseModel):
-    """Reference to a template asset."""
+class BaseView(BaseModel):
+    """Base view model with common properties."""
 
-    model_config = SFMC_MODEL_CONFIG
-
-    id: int = Field(..., description="Template asset ID")
-    asset_type: dict[str, int] = Field(
-        ..., alias="assetType", description="Template asset type"
-    )
-    content: str | None = None
-    slots: dict[str, Any] | None = None
-
-
-class HtmlView(BaseModel):
-    """HTML view for email templates."""
+    @staticmethod
+    def default_factory_data():
+        return {"email": {"options": {"generateFrom": None}}}
 
     model_config = SFMC_MODEL_CONFIG
 
-    content: str = Field(default="", description="HTML content")
-    template: TemplateReference | None = None
-    slots: dict[str, Slot] = Field(
-        default_factory=dict, description="Slots in the HTML view"
-    )
     thumbnail: dict[str, Any] = Field(default_factory=dict)
     available_views: list[str] = Field(default_factory=list, alias="availableViews")
-    model_version: int = Field(default=2, alias="modelVersion")
+    data: dict[str, Any] | None = Field(default=None)
+    model_version: int | None = Field(default=None, alias="modelVersion")
+    content_type: str | None = Field(None, alias="contentType")
+    meta: dict[str, Any] = Field(default_factory=dict)
+
+    # Optional content in base class
+    content: str | None = Field(default=None, description="View content")
+    template: dict[str, Any] | None = None
+    slots: dict[str, Slot] | None = Field(default=None, description="Slots in the view")
+
+    @classmethod
+    def default_view(cls) -> "BaseView":
+        return cls(data=BaseView.default_factory_data(), modelVersion=2)
 
 
-class TextView(BaseModel):
-    """Text view for email templates."""
+class HtmlView(BaseView):
+    """HTML view with template and slots support."""
 
-    model_config = SFMC_MODEL_CONFIG
-
-    content: str | None = Field(default="", description="Text content")
-    generate_from: str | None = Field(default="html", alias="generateFrom")
-    thumbnail: dict[str, Any] = Field(default_factory=dict)
-    available_views: list[str] = Field(default_factory=list, alias="availableViews")
-    model_version: int = Field(default=2, alias="modelVersion")
+    # Override content to make it mandatory
+    content: str = Field(..., description="HTML content")  # Required field
+    template: dict[str, Any] = Field(default_factory=dict)
+    slots: dict[str, Slot] = Field(default_factory=dict)
 
 
-class SubjectLineView(BaseModel):
-    """Subject line view for email templates."""
+if __name__ == "__main__":
+    print(BaseView().model_dump())
 
-    model_config = SFMC_MODEL_CONFIG
-
-    content: str = Field(default="", description="Subject line content")
-    thumbnail: dict[str, Any] = Field(default_factory=dict)
-    available_views: list[str] = Field(default_factory=list, alias="availableViews")
-    model_version: int = Field(default=2, alias="modelVersion")
-
-
-class PreheaderView(BaseModel):
-    """Preheader view for email templates."""
-
-    model_config = SFMC_MODEL_CONFIG
-
-    content: str = Field(default="", description="Preheader content")
-    thumbnail: dict[str, Any] = Field(default_factory=dict)
-    available_views: list[str] = Field(default_factory=list, alias="availableViews")
-    model_version: int = Field(default=2, alias="modelVersion")
-
-
-class EmailViews(BaseModel):
-    """Complete email views structure."""
-
-    model_config = SFMC_MODEL_CONFIG
-
-    html: HtmlView | None = None
-    text: TextView | None = None
-    subjectline: SubjectLineView | None = None
-    preheader: PreheaderView | None = None
-
-
-class Channels(BaseModel):
-    """Channel configuration for assets."""
-
-    model_config = SFMC_MODEL_CONFIG
-
-    email: bool = Field(default=True)
-    web: bool = Field(default=False)
-    mobile: bool | None = None
+    print(HtmlView(content="").model_dump())

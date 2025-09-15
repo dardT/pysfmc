@@ -2,6 +2,8 @@
 
 import asyncio
 
+from dotenv import load_dotenv
+
 from pysfmc import AsyncSFMCClient, SFMCClient
 
 
@@ -99,6 +101,7 @@ async def async_example():
 
 def main():
     """Run both sync and async examples."""
+    load_dotenv()
     try:
         sync_example()
         print("\n" + "=" * 60 + "\n")
