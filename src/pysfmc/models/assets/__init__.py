@@ -19,15 +19,7 @@ from .blocks import (
     Slot,
 )
 from .categories import Category, CategoryCreate, CategoryFilter, CategoryResponse
-from .views import (
-    Channels,
-    EmailViews,
-    HtmlView,
-    PreheaderView,
-    SubjectLineView,
-    TemplateReference,
-    TextView,
-)
+from .views import BaseView, HtmlView
 
 __all__ = [
     # Category models
@@ -51,11 +43,6 @@ __all__ = [
     "create_block_by_type",
     "create_block_by_name",
     # View models
-    "EmailViews",
+    "BaseView",
     "HtmlView",
-    "TextView",
-    "SubjectLineView",
-    "PreheaderView",
-    "TemplateReference",
-    "Channels",
 ]

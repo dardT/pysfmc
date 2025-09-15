@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from ..base import SFMC_MODEL_CONFIG
 from .asset_types import ASSET_TYPE_MAPPING
 from .categories import Category
+from .views import BaseView
 
 
 class AssetType(BaseModel):
@@ -118,7 +119,7 @@ class Asset(BaseModel):
     )
 
     # Template and structure fields
-    views: dict[str, Any] | None = Field(
+    views: dict[str, BaseView] | None = Field(
         None, description="Asset views (email template slots, etc.)"
     )
     slots: dict[str, Any] | None = Field(None, description="Asset slots")
