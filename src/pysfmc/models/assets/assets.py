@@ -185,6 +185,9 @@ class Asset(BaseModel):
 
     # File and media properties
     file: dict[str, Any] | None = Field(None, description="File information")
+    file_properties: dict[str, Any] | None = Field(
+        None, alias="fileProperties", description="File properties"
+    )
     thumbnail: ThumbNail | None = Field(None, description="Asset thumbnail information")
 
     # Business unit and availability
